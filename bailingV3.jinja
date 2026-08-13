@@ -89,16 +89,16 @@
                 {%- endif %}
                 {{- '<tool_call>' + tc.name }}
                 {% set _args = tc.arguments %}
+                {{- '{' }}
                 {%- for k, v in _args.items() %}
-                    {{- '<arg_key>' + k + '</arg_key>' }}
-                    {{- '\n<arg_value>' }}
-                    {%- if v is string %}
-                        {{- v }}
-                    {%- else %}
-                        {{- v | tojson(ensure_ascii=False) }}
+                    {{- '  "' + k + '": ' }}
+                    {%- set _v = v | tojson(ensure_ascii=False) %}
+                        {{- _v }}
+                    {%- if not loop.last %}
+                        {{- ',' }}
                     {%- endif %}
-                    {{- '</arg_value>' }}
                 {%- endfor %}
+                {{- '}' }}
                 {{- '\n</tool_call>' }}
             {%- endfor %}
         {%- endif %}
